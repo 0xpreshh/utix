@@ -16,7 +16,7 @@ export function analyze(input:Input):Result<Report,ErrorCode>{
  const decoder=decoders[input.value[0]];if(!decoder)return err("unknown_prefix");
  try{
  const raw=decoder.decode(input.value);const values:Report["values"]={kind:decoder.kind,version:String(decoder.version),hex:raw.toString("hex"),bytes:String(raw.length)};
- if(input.value.startsWith("M")){const muxed=decodeAddressToMuxedAccount(input.value).med25519();values.base=StrKey.encodeEd25519PublicKey(muxed.ed25519());values.id=muxed.id().toString();}
+ if(input.value.startsWith("M")){const muxed=decodeAddressToMuxedAccount(input.value,true).med25519();values.base=StrKey.encodeEd25519PublicKey(muxed.ed25519());values.id=muxed.id().toString();}
  return ok({values});
  }catch{return err("bad_checksum");}
  }
