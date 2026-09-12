@@ -42,7 +42,24 @@ describe("BatchAddressValidatorPanel", () => {
     await user.click(screen.getByRole("button", { name: copy.submit }));
 
     expect(await screen.findByText(copy.secretSeedRow)).toBeInTheDocument();
+    // Not echoing it in the results table is only half of it — the textarea
+    // it was pasted into must not still be holding it either.
+    expect(screen.getByLabelText<HTMLTextAreaElement>(copy.formLabel).value).toBe("");
     expect(container.textContent ?? "").not.toContain(secretSeed);
+  });
+
+  it("leaves an ordinary list in the field after validating it", async () => {
+    const { user } = renderFeature(<BatchAddressValidatorPanel />);
+
+    await user.type(screen.getByLabelText(copy.formLabel), validPublicKey);
+    await user.click(screen.getByRole("button", { name: copy.submit }));
+
+    await screen.findByText(copy.allValidTitle);
+    // Only a secret key triggers the redaction; clearing a clean paste would
+    // make the tool hostile to use.
+    expect(screen.getByLabelText<HTMLTextAreaElement>(copy.formLabel).value).toBe(
+      validPublicKey
+    );
   });
 
   it("prompts for input when submitted empty", async () => {

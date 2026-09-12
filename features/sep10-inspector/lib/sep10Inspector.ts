@@ -19,11 +19,18 @@ function variantName(value: unknown): string | undefined {
   return undefined;
 }
 
-function bytes(value: unknown): Uint8Array | undefined {
-  if (value instanceof Uint8Array) return value;
+/**
+ * Normalises to `Buffer` rather than `Uint8Array`.
+ *
+ * `StrKey` is typed against `Buffer`, and every consumer here (`TextDecoder`,
+ * `StrKey`) accepts one, so converting once in the extractor keeps the call
+ * sites free of per-use casts.
+ */
+function bytes(value: unknown): Buffer | undefined {
+  if (value instanceof Uint8Array) return Buffer.from(value);
   if (!value || typeof value !== "object") return undefined;
   const nested = (value as { value?: unknown; bytes?: unknown }).value ?? (value as { bytes?: unknown }).bytes;
-  if (nested instanceof Uint8Array) return nested;
+  if (nested instanceof Uint8Array) return Buffer.from(nested);
   return undefined;
 }
 
@@ -49,7 +56,9 @@ function parseTime(value: unknown): string | undefined {
 
 /** Inspect a SEP-10 challenge envelope without contacting Horizon or TOML. */
 export function inspectSep10Challenge(envelopeXdr: string, nowSeconds = Math.floor(Date.now() / 1000)): Result<Sep10InspectorResult, Sep10InspectorErrorCode> {
-  let transaction: any;
+  // `unknown`, not `any`: every read below already goes through `member()`,
+  // which accepts `unknown` and narrows for itself.
+  let transaction: unknown;
   try {
     const envelope = xdr.TransactionEnvelope.fromXDR(envelopeXdr, "base64");
     const envelopeType = variantName(envelope);
@@ -85,7 +94,7 @@ export function inspectSep10Challenge(envelopeXdr: string, nowSeconds = Math.flo
   const maxTime = parseTime(member(bounds, "maxTime"));
   const sequence = stringValue(member(transaction, "seqNum") ?? member(transaction, "sequence")) ?? "0";
   const rules: Sep10Rule[] = [];
-  const operationDetails = operations.map((operation: any) => {
+  const operationDetails = operations.map((operation: unknown) => {
     const body = member(operation, "body");
     const bodyType = variantName(body);
     if (!body || bodyType !== "manageData") return { type: bodyType ?? "unknown" };

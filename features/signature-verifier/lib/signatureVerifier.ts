@@ -30,7 +30,8 @@ export function verifyEd25519Signature(input: SignatureVerifierInput): Result<Si
   const signature = decode(input.signature, input.signatureEncoding);
   if (!signature || signature.length !== 64) return err("invalid_signature_format");
   let verified = false;
-  try { verified = Keypair.fromPublicKey(input.publicKey).verify(message, signature); } catch { return err("invalid_signature_format"); }
+  // `decode` yields Uint8Array; Keypair.verify is typed against Buffer.
+  try { verified = Keypair.fromPublicKey(input.publicKey).verify(Buffer.from(message), Buffer.from(signature)); } catch { return err("invalid_signature_format"); }
   return ok({ summary: verified ? "Signature verified locally." : "Signature did not verify.", verified, publicKey: input.publicKey, messageEncoding: input.messageEncoding, signatureEncoding: input.signatureEncoding, signatureBytes: signature.length, explanation: "A valid result proves possession of the private key for this message only; it is not an identity or transaction authorization." });
 }
 
