@@ -21,6 +21,15 @@ export type BatchAddressValidatorState =
 export function useBatchAddressValidator() {
   const [state, setState] = useState<BatchAddressValidatorState>({ status: "idle" });
 
+  /**
+   * Increments whenever a submitted list contained a secret key.
+   *
+   * The results table already refuses to echo the seed, but the textarea it
+   * was pasted into still holds it in plain text. The panel keys the form on
+   * this counter so that paste is cleared rather than left on screen.
+   */
+  const [redactions, setRedactions] = useState(0);
+
   const submit = useCallback((raw: string) => {
     const parsed = parseBatchAddressValidatorInput(raw);
 
@@ -30,10 +39,11 @@ export function useBatchAddressValidator() {
     }
 
     const result = runBatchAddressValidator(parsed.value);
+    if (result.summary.secretSeeds > 0) setRedactions((count) => count + 1);
     setState({ status: "result", result });
   }, []);
 
   const reset = useCallback(() => setState({ status: "idle" }), []);
 
-  return { state, submit, reset };
+  return { state, submit, reset, redactions };
 }

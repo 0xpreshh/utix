@@ -15,6 +15,9 @@ export const batchAddressValidatorFixture: BatchAddressValidatorResult = runBatc
 
 export const secretSeedList = [validPublicKey, secretSeed];
 
+/** Re-exported so this slice's tests can assert the seed is never echoed back. */
+export { secretSeed };
+
 export const commaSeparatedInput = `${validPublicKey}, ${secondPublicKey}`;
 export const spaceSeparatedInput = `${validPublicKey} ${secondPublicKey}`;
 export const newlineSeparatedInput = `${validPublicKey}\n${secondPublicKey}`;
