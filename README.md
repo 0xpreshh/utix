@@ -1,11 +1,11 @@
-# RevyHubX
+# Utix
 
 An open-source toolkit of small, focused utilities for Stellar developers —
 address validation, balance and trustline inspection, transaction lookup,
 payment requests, wallet detection and testnet funding, with more tools being
 added continuously by contributors.
 
-Every tool is read-only. RevyHubX never asks for a secret key and never signs
+Every tool is read-only. Utix never asks for a secret key and never signs
 or submits a transaction.
 
 ## Architecture in one paragraph
@@ -40,8 +40,8 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS ·
 ## Local setup
 
 ```bash
-git clone https://github.com/RevenantLabs/RevyHub.git
-cd RevyHub
+git clone https://github.com/BigDella/utix.git
+cd utix
 npm install
 npm run dev
 ```
@@ -94,4 +94,4 @@ enforce a global percentage threshold.
 
 ## Security
 
-See [SECURITY.md](./SECURITY.md). RevyHubX is read-only by design.
+See [SECURITY.md](./SECURITY.md). Utix is read-only by design.
