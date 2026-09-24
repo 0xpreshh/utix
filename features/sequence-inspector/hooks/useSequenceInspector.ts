@@ -20,6 +20,7 @@ const IDLE: SequenceInspectorState = { status: "idle" };
 interface HeldState {
   state: SequenceInspectorState;
   network: StellarNetwork;
+  lastInput?: string;
 }
 
 export function useSequenceInspector() {
@@ -33,13 +34,13 @@ export function useSequenceInspector() {
       controller.current?.abort();
       const parsed = parseSequenceInspectorInput(raw);
       if (isErr(parsed)) {
-        setHeld({ state: { status: "error", code: parsed.code }, network });
+        setHeld({ state: { status: "error", code: parsed.code }, network, lastInput: raw.accountId });
         return;
       }
 
       const next = new AbortController();
       controller.current = next;
-      setHeld({ state: { status: "loading" }, network });
+      setHeld({ state: { status: "loading" }, network, lastInput: raw.accountId });
 
       const result = await inspectSequence(parsed.value, network, next.signal);
       if (next.signal.aborted) return;
@@ -47,16 +48,23 @@ export function useSequenceInspector() {
         state: result.ok
           ? { status: "success", result: result.value }
           : { status: "error", code: result.code },
-        network
+        network,
+        lastInput: raw.accountId
       });
     },
     [network]
   );
+
+  const refresh = useCallback(() => {
+    if (held.lastInput) {
+      submit({ accountId: held.lastInput });
+    }
+  }, [held.lastInput, submit]);
 
   const reset = useCallback(() => {
     controller.current?.abort();
     setHeld({ state: IDLE, network });
   }, [network]);
 
-  return { state, submit, reset };
+  return { state, submit, reset, refresh };
 }

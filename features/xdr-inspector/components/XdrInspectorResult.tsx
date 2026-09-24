@@ -50,6 +50,7 @@ export function XdrInspectorResult({ summary }: { summary: EnvelopeSummary }) {
           ]}
         />
         <p className="mt-4 text-xs leading-5 text-[#68758a]">{copy.signatureNote}</p>
+        <p className="mt-2 text-xs leading-5 text-[#9a513f]">{copy.sequenceAdvisory}</p>
       </Card>
 
       {summary.feeBump ? (

@@ -72,7 +72,9 @@ export const copy = {
 
   degradedTitle: "Answered without the current ledger",
   degradedDescription:
-    "The bounds below were decoded from the envelope, but nothing could be compared against the chain. Time bounds fall back to your device clock, and ledger bounds are left unevaluated."
+    "The bounds below were decoded from the envelope, but nothing could be compared against the chain. Time bounds fall back to your device clock, and ledger bounds are left unevaluated.",
+  sequenceAdvisory:
+    "This is the sequence number encoded in the envelope. The source account's current sequence may have changed since this was displayed — always re-check before submitting a real transaction."
 } as const;
 
 export const verdictCopy: Record<Verdict, { title: string; description: string }> = {

@@ -13,10 +13,12 @@ import type { SequenceInspectorResult as SequenceInspectorResultValue } from "@/
 
 export function SequenceInspectorResult({
   result,
-  onReset
+  onReset,
+  onRefresh
 }: {
   result: SequenceInspectorResultValue;
   onReset: () => void;
+  onRefresh: () => void;
 }) {
   const current = formatSequence(result.currentSequence);
   const next = result.nextSequence === null ? null : formatSequence(result.nextSequence);
@@ -100,9 +102,20 @@ export function SequenceInspectorResult({
         description={next ? copy.txBadSeqDescription : copy.exhaustedDescription}
       />
 
-      <Button type="button" variant="secondary" onClick={onReset}>
-        {copy.reset}
-      </Button>
+      <StatusMessage
+        type="warning"
+        title="Sequence may be stale"
+        description={copy.sequenceStaleAdvisory}
+      />
+
+      <div className="flex gap-3">
+        <Button type="button" variant="primary" onClick={onRefresh}>
+          {copy.refresh}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onReset}>
+          {copy.reset}
+        </Button>
+      </div>
     </div>
   );
 }
