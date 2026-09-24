@@ -61,6 +61,7 @@ export function PreconditionsExplainerResult({
             { label: copy.labelSequence, value: explanation.sequenceNumber, mono: true }
           ]}
         />
+        <p className="mt-4 text-xs leading-5 text-[#9a513f]">{copy.sequenceAdvisory}</p>
       </Card>
 
       <Card>

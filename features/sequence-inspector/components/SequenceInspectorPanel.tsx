@@ -10,7 +10,7 @@ import { SequenceInspectorResult } from "@/features/sequence-inspector/component
 import { SequenceInspectorEmptyState } from "@/features/sequence-inspector/components/SequenceInspectorEmptyState";
 
 export function SequenceInspectorPanel() {
-  const { state, submit, refresh, reset } = useSequenceInspector();
+  const { state, submit, reset, refresh } = useSequenceInspector();
 
   return (
     <div className="space-y-5">

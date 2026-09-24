@@ -116,9 +116,20 @@ export function SequenceInspectorResult({
         description={next ? copy.txBadSeqDescription : copy.exhaustedDescription}
       />
 
-      <Button type="button" variant="secondary" onClick={onReset}>
-        {copy.reset}
-      </Button>
+      <StatusMessage
+        type="warning"
+        title="Sequence may be stale"
+        description={copy.sequenceStaleAdvisory}
+      />
+
+      <div className="flex gap-3">
+        <Button type="button" variant="primary" onClick={onRefresh}>
+          {copy.refresh}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onReset}>
+          {copy.reset}
+        </Button>
+      </div>
     </div>
   );
 }

@@ -52,6 +52,8 @@ export const copy = {
     "Signatures are counted per layer and identified only by their four-byte hints. This tool does not verify them and does not evaluate whether either account's signing thresholds are met.",
   hashNote:
     "Each copy action returns the hash of the layer it sits in. The outer hash is what the fee source signs; the inner hash is what the inner transaction's signers signed, and it is unchanged by the wrapper.",
+  sequenceAdvisory:
+    "This is the inner transaction's sequence number encoded in the envelope. The underlying account's current sequence may have changed since this was displayed — always re-check before submitting a real transaction.",
   noSignatures: "None — this layer carries an empty signature vector.",
   noOperations: "This inner transaction declares no operations."
 } as const;

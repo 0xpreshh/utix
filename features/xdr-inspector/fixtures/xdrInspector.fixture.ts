@@ -89,3 +89,22 @@ export const feeBumpXdr = TransactionBuilder.buildFeeBumpTransaction(
 export const notAnEnvelopeXdr = Buffer.alloc(32, 5).toString("base64");
 
 export const notBase64 = "this is definitely not base64!!";
+
+/** A transaction with 100 operations for performance benchmarking. */
+export const largeEnvelopeXdr = (() => {
+  const tx = new TransactionBuilder(new Account(source.publicKey(), "4370426197114880"), {
+    fee: "100",
+    networkPassphrase: Networks.TESTNET,
+    timebounds: { minTime: MIN_TIME, maxTime: MAX_TIME }
+  });
+  for (let i = 0; i < 100; i++) {
+    tx.addOperation(
+      Operation.payment({
+        destination: destination.publicKey(),
+        asset: Asset.native(),
+        amount: "0.0000001"
+      })
+    );
+  }
+  return tx.build().toXDR();
+})();

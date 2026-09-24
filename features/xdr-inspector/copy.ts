@@ -34,7 +34,8 @@ export const copy = {
   labelExtraSigners: "Extra signers",
   labelFeeSource: "Fee paid by",
   labelTotalFee: "Total fee",
-  labelOuterSignatures: "Outer signatures"
+  labelOuterSignatures: "Outer signatures",
+  sequenceAdvisory: "This is the sequence number encoded in the envelope — not the current account sequence. For building unsigned previews, always re-check the current sequence before submitting a real transaction."
 } as const;
 
 export const errorCopy: Record<XdrErrorCode, { title: string; description: string }> = {

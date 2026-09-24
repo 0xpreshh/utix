@@ -90,6 +90,7 @@ export function FeeBumpInspectorResult({ report }: { report: FeeBumpReport }) {
             }
           ]}
         />
+        <p className="mt-4 text-xs leading-5 text-[#9a513f]">{copy.sequenceAdvisory}</p>
         <p className="mt-4 text-xs leading-5 text-[#68758a]">{copy.hashNote}</p>
         <p className="mt-2 text-xs leading-5 text-[#68758a]">{copy.signatureNote}</p>
       </Card>
