@@ -63,6 +63,29 @@ describe("useSequenceInspector", () => {
     expect(JSON.stringify(result.current.state)).not.toContain(secretSeed);
   });
 
+  it("refresh re-fetches the last submitted input", async () => {
+    const { result } = renderHook(() => useSequenceInspector(), { wrapper });
+    await act(async () => {
+      await result.current.submit({ accountId });
+    });
+    await waitFor(() => expect(result.current.state.status).toBe("success"));
+
+    await act(async () => {
+      await result.current.refresh();
+    });
+    await waitFor(() => expect(result.current.state.status).toBe("success"));
+    expect(result.current.state.status === "success" && result.current.state.result.currentSequence)
+      .toBe(currentSequence);
+  });
+
+  it("refresh is a no-op before any submission", async () => {
+    const { result } = renderHook(() => useSequenceInspector(), { wrapper });
+    await act(async () => {
+      await result.current.refresh();
+    });
+    expect(result.current.state).toEqual({ status: "idle" });
+  });
+
   it("returns to idle when reset", async () => {
     const { result } = renderHook(() => useSequenceInspector(), { wrapper });
     await act(async () => {

@@ -10,7 +10,7 @@ import { SequenceInspectorResult } from "@/features/sequence-inspector/component
 import { SequenceInspectorEmptyState } from "@/features/sequence-inspector/components/SequenceInspectorEmptyState";
 
 export function SequenceInspectorPanel() {
-  const { state, submit, reset } = useSequenceInspector();
+  const { state, submit, refresh, reset } = useSequenceInspector();
 
   return (
     <div className="space-y-5">
@@ -34,7 +34,7 @@ export function SequenceInspectorPanel() {
       ) : null}
 
       {state.status === "success" ? (
-        <SequenceInspectorResult result={state.result} onReset={reset} />
+        <SequenceInspectorResult result={state.result} onReset={reset} onRefresh={refresh} />
       ) : null}
 
       {state.status === "idle" ? <SequenceInspectorEmptyState /> : null}

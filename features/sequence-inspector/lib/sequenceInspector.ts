@@ -27,7 +27,7 @@ export class HorizonResponseError extends Error {
 export function deriveSequenceResult(
   account: HorizonSequenceAccount,
   bumpTarget?: string
-): Result<SequenceInspectorResult, SequenceInspectorErrorCode> {
+): Result<Omit<SequenceInspectorResult, "fetchedAt">, SequenceInspectorErrorCode> {
   try {
     const sequenceLedger = String(account.sequence_ledger);
     if (
@@ -98,7 +98,8 @@ export async function inspectSequence(
     if (!response.ok) throw new HorizonResponseError(response.status);
     const account = (await response.json()) as HorizonSequenceAccount;
     if (account.account_id !== input.accountId) return err("request_failed");
-    return deriveSequenceResult(account, input.bumpTarget);
+    const derived = deriveSequenceResult(account, input.bumpTarget);
+    return derived.ok ? ok({ ...derived.value, fetchedAt: Date.now() }) : derived;
   } catch (error) {
     return err(toSequenceInspectorErrorCode(error));
   } finally {

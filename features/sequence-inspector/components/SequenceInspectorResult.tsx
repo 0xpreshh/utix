@@ -6,6 +6,7 @@ import { StatusMessage } from "@/core/ui/StatusMessage";
 import { copy } from "@/features/sequence-inspector/copy";
 import {
   formatBitPart,
+  formatFetchedAt,
   formatIncrease,
   formatSequence
 } from "@/features/sequence-inspector/lib/format";
@@ -13,10 +14,12 @@ import type { SequenceInspectorResult as SequenceInspectorResultValue } from "@/
 
 export function SequenceInspectorResult({
   result,
-  onReset
+  onReset,
+  onRefresh
 }: {
   result: SequenceInspectorResultValue;
   onReset: () => void;
+  onRefresh: () => void;
 }) {
   const current = formatSequence(result.currentSequence);
   const next = result.nextSequence === null ? null : formatSequence(result.nextSequence);
@@ -27,6 +30,19 @@ export function SequenceInspectorResult({
         <CardHeader>
           <CardTitle>{copy.resultTitle}</CardTitle>
         </CardHeader>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-[#68758a]">
+          <span>
+            {copy.fetchedAt} {formatFetchedAt(result.fetchedAt)}
+          </span>
+          <Button type="button" variant="secondary" onClick={onRefresh}>
+            {copy.refresh}
+          </Button>
+        </div>
+        <StatusMessage
+          type="warning"
+          title={copy.stalenessTitle}
+          description={copy.stalenessDescription}
+        />
         <DataList
           items={[
             {

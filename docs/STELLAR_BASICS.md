@@ -34,6 +34,18 @@ The Trustline Checker asks for:
 
 Transactions are identified by 64-character hexadecimal hashes. The Transaction Lookup tool validates the hash shape before querying Horizon and links to Stellar Expert for deeper inspection.
 
+## Sequence Numbers
+
+An account's sequence number can change the instant another transaction from
+that account is submitted. Because this project is read-only and never signs
+or submits anything, it cannot guarantee that a sequence number it shows you
+is still current by the time you use it elsewhere — it can only report what
+Horizon returned at fetch time. Tools that display a sequence number label it
+with the time it was fetched and offer a refresh action; re-check the value
+immediately before relying on it to build a transaction.
+
 ## Wallets
 
-Freighter is a browser wallet for Stellar. This project only requests a public key and network information. It does not request signatures, secret keys, or transaction submission.
+Freighter is the only browser wallet this project currently detects and connects to. This project only requests a public key and network information. It does not request signatures, secret keys, or transaction submission.
+
+Because extensions inject their API into the page asynchronously, detection retries for a short bounded window after the page loads instead of checking only once. If Freighter is not found after that window, the page reports it as not installed; use the refresh action once the extension has finished loading or after installing it.

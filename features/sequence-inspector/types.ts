@@ -11,6 +11,7 @@ export interface SequenceInspectorResult {
   offset: bigint;
   creationLedgerMaximum: bigint;
   sequenceUpdatedLedger: bigint;
+  fetchedAt: number;
   bumpTarget?: bigint;
   bumpIncrease?: bigint;
   bumpChangesLedgerPrefix?: boolean;
