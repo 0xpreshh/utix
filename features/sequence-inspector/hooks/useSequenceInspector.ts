@@ -27,11 +27,13 @@ export function useSequenceInspector() {
   const { network } = useNetwork();
   const [held, setHeld] = useState<HeldState>({ state: IDLE, network });
   const controller = useRef<AbortController | null>(null);
+  const lastRaw = useRef<RawSequenceInspectorInput | null>(null);
   const state = held.network === network ? held.state : IDLE;
 
   const submit = useCallback(
     async (raw: RawSequenceInspectorInput) => {
       controller.current?.abort();
+      lastRaw.current = raw;
       const parsed = parseSequenceInspectorInput(raw);
       if (isErr(parsed)) {
         setHeld({ state: { status: "error", code: parsed.code }, network, lastInput: raw.accountId });

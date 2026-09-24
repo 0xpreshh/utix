@@ -39,6 +39,19 @@ describe("SequenceInspectorPanel", () => {
     expect(screen.getByText(copy.txBadSeqTitle)).toBeInTheDocument();
   });
 
+  it("shows a fetched-at label and staleness advisory, and refresh re-fetches", async () => {
+    const { user } = renderFeature(<SequenceInspectorPanel />);
+    await user.type(screen.getByLabelText(copy.accountLabel), accountId);
+    await user.click(screen.getByRole("button", { name: copy.submit }));
+    await screen.findByText(copy.resultTitle);
+
+    expect(screen.getByText(copy.stalenessTitle)).toBeInTheDocument();
+    expect(screen.getByText((text) => text.startsWith(copy.fetchedAt))).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: copy.refresh }));
+    expect(await screen.findByText(currentSequence.toString())).toBeInTheDocument();
+  });
+
   it("copies the next sequence as exact decimal digits", async () => {
     const { user } = renderFeature(<SequenceInspectorPanel />);
     await user.type(screen.getByLabelText(copy.accountLabel), accountId);

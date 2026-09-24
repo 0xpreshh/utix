@@ -10,3 +10,7 @@ export function formatBitPart(value: bigint): string {
 export function formatIncrease(value: bigint): string {
   return `+${formatSequence(value)}`;
 }
+
+export function formatFetchedAt(timestampMs: number): string {
+  return new Date(timestampMs).toLocaleString();
+}
